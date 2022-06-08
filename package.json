@@ -8,7 +8,7 @@
     "url": "git+https://github.com/Jangwoohyeok123/wetube.git"
   },
   "scripts": {
-    "dev": "index.js"
+    "dev": "nodemon --exec babel-node src/server.js"
   },
   "author": "Nicolas",
   "license": "ISC",
