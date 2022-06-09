@@ -1,35 +1,22 @@
 import express from "express";
 
 const app = express();
+
 const PORT = 4000;
 
-const logger = (req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
+const routerLogger = (req, res, next) => { // 
+  next();
+};
+const methodLogger = (req, res, next) => {
   next();
 };
 
-const privateMiddleware = (req, res, next) => {
-  const url = req.url;
-  if (url === "/protected") {
-    return res.send("<h1>Not Allowed</h1>");
-  }
-  next();
-};
+const home = (req, res, next) => res.send("hello");
 
-const handleProtected = (req, res) => {
-  return res.send("Welcome to the private lounge.");
-};
-
-const handleHome = (req, res) => {
-  return res.send("I love middlewares");
-};
-
-app.use(logger);
-app.use(privateMiddleware);
-app.get("/", handleHome); // handleHome은 next 함수가 됨
-app.get("/protected", handleProtected);
-
-const handleListening = () =>
-  console.log(`✅ Server listenting on port http://localhost:${PORT} 🚀`);
+app.get("/ass", methodLogger, routerLogger, home);
 
 app.listen(PORT, handleListening);
+
+function handleListening() {
+  console.log(`Server listening on port http://localhost:${PORT}`);
+}
