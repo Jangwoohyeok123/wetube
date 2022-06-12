@@ -9,7 +9,7 @@ const app = express();
 const logger = morgan("dev");
 
 app.set("view engine", "pug");
-app.set("views", process.cwd() + "/src/views"); // pug가 봐야할 파일의 경로를 바꾸는 함수 
+app.set("views", process.cwd() + "/src/views"); // pug가 봐야할 파일의 경로를 알려줌
 app.use(logger);
 app.use("/", globalRouter);
 app.use("/videos", videoRouter);
