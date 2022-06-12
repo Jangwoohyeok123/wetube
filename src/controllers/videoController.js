@@ -1,6 +1,41 @@
-export const trending = (req, res) => res.send("Home page Videos");
-export const see = (req, res) => res.send("see");
-export const edit = (req, res) => res.send("Edit");
-export const search = (req, res) => res.send("search");
+const fakeUser = {
+  username: "Nico",
+  loggedIn: false,
+};
+
+export const trending = (req, res) => {
+  const videos = [
+    {
+      title: "First Video",
+      rating: 5,
+      comments: 2,
+      createdAt: "2 minutes age",
+      views: 59,
+      id: 1,
+    },
+    {
+      title: "Second Video",
+      rating: 5,
+      comments: 2,
+      createdAt: "2 minutes age",
+      views: 59,
+      id: 1,
+    },
+    {
+      title: "Third Video",
+      rating: 5,
+      comments: 2,
+      createdAt: "2 minutes age",
+      views: 59,
+      id: 1,
+    },
+  ];
+  return res.render("home", { pageTitle: "Home", fakeUser, videos });
+};
+export const see = (req, res) => res.render("watch");
+export const edit = (req, res) => res.render("edit");
+export const search = (req, res) => res.send("Search");
 export const upload = (req, res) => res.send("Upload");
-export const deleteVideo = (req, res) => res.send("Delete Video");
+export const deleteVideo = (req, res) => {
+  return res.send("Delete Video");
+};
