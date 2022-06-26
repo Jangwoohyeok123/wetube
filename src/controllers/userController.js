@@ -1,7 +1,6 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
-
-export const getJoin = (req, res) => res.render("join", { pageTitle: "join" });
+export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
   const { name, username, email, password, password2, location } = req.body;
   const pageTitle = "Join";
@@ -12,7 +11,6 @@ export const postJoin = async (req, res) => {
     });
   }
   const exists = await User.exists({ $or: [{ username }, { email }] });
-
   if (exists) {
     return res.status(400).render("join", {
       pageTitle,
@@ -29,33 +27,49 @@ export const postJoin = async (req, res) => {
     });
     return res.redirect("/login");
   } catch (error) {
-    return res.status(400).render("join", {
+    return res.render("join", {
       pageTitle: "Upload Video",
       errorMessage: error_message,
-    })
+    });
   }
 };
-export const getLogin = (req,res) => {
-  res.render("login", {pageTitle: "Login"});
-}
-export const postLogin = async(req, res) => {
-  const {username, password} = req.body;
+export const getLogin = (req, res) =>
+  res.render("login", { pageTitle: "Login" });
+export const postLogin = async (req, res) => {
+  const { username, password } = req.body;
   const pageTitle = "Login";
   const user = await User.findOne({ username });
-  const exists = await User.exists({ username });
-  if(!exists) {
+  if (!user) {
     return res.status(400).render("login", {
-      pageTitle: "Login",
+      pageTitle,
       errorMessage: "An account with this username does not exists.",
     });
   }
-  res.end();
+  const ok = await bcrypt.compare(password, user.password);
+  if (!ok) {
+    return res.status(400).render("login", {
+      pageTitle,
+      errorMessage: "Wrong password",
+    });
+  }
+  req.session.loggedIn = true;
+  req.session.user = user;
+  return res.redirect("/");
+};
+
+export const startGithubLogin = (req, res) => {
+  const baseUrl = "https://github.com/login/oauth/authorize";
+  const config = {
+    client_id = "885e007a2c4dc6fbcd6f",
+    allow_signup: false,
+    scope: ""
+  }
 }
+
 
 
 
 export const edit = (req, res) => res.send("Edit User");
 export const remove = (req, res) => res.send("Remove User");
-export const login = (req, res) => res.send("Login");
 export const logout = (req, res) => res.send("Log out");
 export const see = (req, res) => res.send("See User");
